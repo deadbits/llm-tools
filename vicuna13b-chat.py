@@ -1,10 +1,4 @@
 #!/usr/bin/env python3
-##
-# chat-vicuna.py
-# leverage fastchat client to chat with a Vicuna model
-# --
-# github.com/deadbits
-##
 import argparse
 
 from rich.console import Console
@@ -15,7 +9,6 @@ import cmd2
 from fastchat import client
 
 
-# modify as needed
 PROMPT_TEMPLATE = """
 You are a friendly AI assistant chatbot that helps people with their questions. You have a friendly personality and are able to answer questions about the world around you.
 
@@ -42,9 +35,7 @@ class VicunaChat(cmd2.Cmd):
 
 
     def generate(self, input_text: str):
-        """Generate a response from the ChatCompletion endpoint"""
         answer = None
-
         prompt = PROMPT_TEMPLATE.format(prompt=input_text)
 
         try:
