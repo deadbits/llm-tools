@@ -26,14 +26,8 @@ logging.basicConfig(level=logging.CRITICAL)
 MODEL_NAME = 'gpt-3.5-turbo'
 
 
-def handle_exit():
-    print('[status] exiting ...')
-    print('👻 goodbye!\n')
-    sys.exit(1)
-
-
 def load_document(fpath):
-    print('[status] loading document ({})'.format(fpath))
+    print(f'[status] loading document: {fpath}')
     PDFReader = download_loader('PDFReader')
     loader = PDFReader()
     docs = loader.load_data(file=Path(fpath))
@@ -42,8 +36,7 @@ def load_document(fpath):
 
 def chat(fpath, api_key):
     docs = load_document(fpath)
-
-    llm = LLMPredictor(llm=OpenAI(openai_api_key=api_key, temperature=0, model_name=MODEL_NAME))
+    llm = LLMPredictor(llm=OpenAI(openai_api_key=api_key, temperature=0.7, model_name=MODEL_NAME))
     ctx = ServiceContext.from_defaults(llm_predictor=llm, chunk_size_limit=1024)
     index = GPTSimpleVectorIndex.from_documents(docs, service_context=ctx)
 
@@ -62,7 +55,8 @@ def chat(fpath, api_key):
             print(f'🤖 >> {response}')
 
     except KeyboardInterrupt:
-        handle_exit()
+        print('exiting ...')
+        sys.exit(0)
 
 
 if __name__ == '__main__':
