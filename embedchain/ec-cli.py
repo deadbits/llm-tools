@@ -95,11 +95,9 @@ if __name__ == '__main__':
 
     if args.model == 'openai':
         app = App()
-        os.environ['OPENAI_API_KEY'] = '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'
         rprint(f'[bold green]using openai model[/bold green]')
     elif args.model == 'llama2':
         app = Llama2App()
-        os.environ['REPLICATE_API_TOKEN'] = "xxx"
         rprint(f'[bold green]using llama2 model via replicate[/bold green]')
 
     if args.embed:
