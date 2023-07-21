@@ -35,9 +35,9 @@ options:
 ![ec-cli.py demo](/assets/embedchain-cli.png)
 
 Data added with the `--embed` or `--text` arguments is ingested into your ChromaDB.
-You can then query your data using the `--query` argument or by running [ec-query-server.py](/embedchain/ec-query-server.py) and hitting the `/query` endpoint.
-The API server is just a standalone version of [this embedchain notebook](https://github.com/embedchain/embedchain/blob/main/notebooks/embedchain-docs-site-example.ipynb), but it does the job.
+You can also run [ec-api-server.py](/embedchain/ec-api-server.py) and posting to the `/embed` endpoint.
 
+You can then query your data using the `--query` argument or the `/query` endpoint of the API server.
 
 ## Stack
 Running models and tools locally is all good and well, but pretty quickly you'll want a more robust stack for things like:
