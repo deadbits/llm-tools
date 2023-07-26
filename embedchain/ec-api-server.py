@@ -3,6 +3,7 @@
 # embedchain API server
 # add data to your embedchain via HTTP POST and query via HTTP GET
 ##
+import os
 import sys
 import argparse
 
@@ -47,7 +48,7 @@ def determine_type(item):
 
 @app.route('/query', methods=['GET'])
 def query():
-    user_prompt = request.args.get('prompt', default = "", type = str)
+    user_prompt = request.args.get('prompt', default = '', type = str)
     response = bot.query(user_prompt)
     return jsonify({'response': response})
 
@@ -62,15 +63,15 @@ def embed():
     else:
         bot.add(item_type, data['item'])
 
-    # bot.add does not return anything unfortunately
-    # so there's no real way to verify that an resource was successfully added to db
-    # without either:
-    # - trying to add the same resource again and being told it already exists
-    # - querying the db for the resource
-    # - reading the status message printed to the console from the `.add` function
-    # i might open a PR with embedchain to address
-
     return jsonify({'status': f'resource added to db: {data["item"]}'})
+
+
+@app.route('/summarize', methods=['POST'])
+def summarize():
+    data = request.get_json()
+
+    response = bot.summarize(data['item'])
+    return jsonify({'response': response})
 
 
 if __name__ == '__main__':
@@ -84,9 +85,21 @@ if __name__ == '__main__':
         help='llm model'
     )
 
+    parser.add_argument(
+        '-k', '--key',
+        help='openai api key',
+        required=False,
+        action='store'
+    )
+
     args = parser.parse_args()
 
     if args.model == 'openai':
+        if not args.key:
+            print('no openai api key provided; will attempt to use OPENAI_API_KEY environment variable')
+        else:
+            os.environ['OPENAI_API_KEY'] = args.key
+
         try:
             bot = App()
             rprint(f'[bold green]using openai model[/bold green]')
